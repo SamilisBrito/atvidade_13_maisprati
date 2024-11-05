@@ -99,16 +99,17 @@ public class SecurityConfig {
 
                 // Define as regras de autorização para as requisições HTTP.
                 .authorizeHttpRequests(auth -> auth
-                        // Permite todas as requisições para o caminho "/auth/**" (rota de autenticação).
-                        .requestMatchers("/auth/**").permitAll()
+                                // Permite todas as requisições para o caminho "/auth/**" (rota de autenticação).
+                                .requestMatchers("/auth/**").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-                        // Requere autenticação para todas as requisições que começam com "/api/**".
-                        // **authenticated()** significa que apenas usuários autenticados poderão acessar as rotas "/api/**".
-                        .requestMatchers("/api/**").authenticated()
+//                        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                                .requestMatchers("/api/**").permitAll()
+                                // Requere autenticação para todas as requisições que começam com "/api/**".
+                                // **authenticated()** significa que apenas usuários autenticados poderão acessar as rotas "/api/**".
+//                        .requestMatchers("/api/**").authenticated()
 
-                        // Qualquer outra requisição precisa estar autenticada.
-                        .anyRequest().authenticated()
+                                // Qualquer outra requisição precisa estar autenticada.
+                                .anyRequest().authenticated()
                 )
 
                 // Configura o login via OAuth2.

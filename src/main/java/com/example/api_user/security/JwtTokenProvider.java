@@ -3,6 +3,7 @@ package com.example.api_user.security;
 
 // Importa classes do io.jsonwebtoken, que é uma biblioteca usada para gerar e analisar tokens JWT.
 
+import com.example.api_user.dto.UserDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -38,6 +39,10 @@ public class JwtTokenProvider {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public Integer extractUserId(String token) {
+        return extractClaim(token, claims -> (Integer) claims.get("userId"));
+    }
+
     // Método genérico para extrair qualquer "claim" do token.
     // O parâmetro claimsResolver é uma função que define qual "claim" será extraída.
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -59,12 +64,12 @@ public class JwtTokenProvider {
 
     // Método para gerar um novo token JWT com base nos detalhes do usuário.
     // Recebe o objeto UserDetails e cria o token usando o nome de usuário como "subject".
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDTO user) {
         // Cria um mapa vazio para claims (pode ser usado para adicionar informações adicionais ao token).
         Map<String, Object> claims = new HashMap<>();
-
+        claims.put("userId", user.getId());
         // Chama o método createToken para gerar o token JWT, passando as claims e o nome de usuário.
-        return createToken(claims, userDetails.getUsername());
+        return createToken(claims, user.getUsername());
     }
 
     // Método privado para criar o token JWT.

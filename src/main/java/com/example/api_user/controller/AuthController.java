@@ -3,15 +3,20 @@ package com.example.api_user.controller;
 
 // Importações necessárias para manipulação de autenticação e JWT (Json Web Token)
 // import ch.qos.logback.core.net.SMTPAppenderBase;
+
 import com.example.api_user.dto.LoginDTO;
+import com.example.api_user.dto.UserDTO;
 import com.example.api_user.security.JwtTokenProvider;
+import com.example.api_user.service.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,11 +32,14 @@ public class AuthController {
     // UserDetailsService é uma interface do Spring Security que fornece a funcionalidade para carregar detalhes de usuários.
     private final UserDetailsService userDetailsService;
 
+    private final UserService userService;
+
     // Construtor que recebe as dependências como parâmetros. Essas dependências são injetadas pelo Spring.
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserDetailsService userDetailsService, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userDetailsService = userDetailsService;
+        this.userService = userService;
     }
 
     // Anotação @PostMapping("/login"):
@@ -52,9 +60,11 @@ public class AuthController {
 
             // Se a autenticação for bem-sucedida, o objeto `authentication` conterá as informações do usuário autenticado.
             // O método `getPrincipal()` retorna o objeto principal da autenticação, que no caso é um `UserDetails` (detalhes do usuário autenticado).
-            UserDetails user = (UserDetails) authentication.getPrincipal();
+            UserDTO user = userService.getUserByUserName(loginDTO.getUsername());
+//            UserDetails user = (UserDetails) authentication.getPrincipal();
 
             // O JwtTokenProvider gera um token JWT usando as informações do usuário autenticado.
+
             return jwtTokenProvider.generateToken(user);
 
         } catch (AuthenticationException error) {

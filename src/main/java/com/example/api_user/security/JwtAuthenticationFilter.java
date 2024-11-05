@@ -55,6 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Extrai o nome de usuário (username) do token JWT usando o jwtTokenProvider.
         String username = jwtTokenProvider.extractUsername(jwt);
+        int userid = jwtTokenProvider.extractUserId(jwt);
 
         // Inicializa o objeto UserDetails como null.
         UserDetails userDetails = null;

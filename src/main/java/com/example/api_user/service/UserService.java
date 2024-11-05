@@ -44,10 +44,16 @@ public class UserService {
         return user.map(this::convertToDTO).orElse(null); // Se o usuário estiver presente, converte para `UserDTO`, caso contrário, retorna null.
     }
 
+    public UserDTO getUserByUserName(String userName) {
+        Optional<User> user = Optional.ofNullable(userRepository.findByUsername(userName)); // Usa `Optional` para evitar null pointers.
+        return user.map(this::convertToDTO).orElse(null); // Se o usuário estiver presente, converte para `UserDTO`, caso contrário, retorna null.
+    }
+
     // Método para criar um novo usuário
     // - Recebe um `UserDTO` como entrada, converte-o em um objeto `User` e o salva no banco de dados. A senha é criptografada antes de salvar.
     public UserDTO createUser(UserDTO userDTO) {
         // Cria um novo objeto `User` e define seus atributos com base nos dados do `UserDTO`.
+
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());

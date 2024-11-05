@@ -2,6 +2,7 @@
 package com.example.api_user.repository;
 
 // Importações necessárias para a interação com o banco de dados usando Spring Data JPA
+
 import org.springframework.data.jpa.repository.JpaRepository; // Interface que fornece métodos CRUD e mais para trabalhar com persistência JPA.
 import com.example.api_user.model.User; // A classe modelo que representa a entidade User no banco de dados.
 import org.springframework.stereotype.Repository; // Anotação que marca esta interface como um repositório, uma especialização de um componente Spring.
